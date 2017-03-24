@@ -1,4 +1,5 @@
 import spidev
+import colorsys
 
 """
 Driver for APA102 LEDS (aka "DotStar").
@@ -130,6 +131,14 @@ class APA102:
     def setPixelRGB(self, ledNum, rgbColor):
         self.setPixel(ledNum, (rgbColor & 0xFF0000) >> 16, (rgbColor & 0x00FF00) >> 8, rgbColor & 0x0000FF)
 
+    """
+    void setPixelHSV(ledNum,hue,sat,val)
+    Sets the color of one pixel in the LED stripe. The changed pixel is not shown yet on the Stripe, it is only
+    written to the pixel buffer. Colors are passed as hue, saturation and value.
+    """
+    def setPixelHSV(self, ledNum, hue, sat, val):
+        hsv = colorsys.hsv_to_rgb(hue, sat, val)
+        self.setPixel(ledNum, int(hsv[0]*255), int(hsv[1]*255), int(hsv[2]*255))      
     """
     void rotate(positions)
     Treating the internal leds array as a circular buffer, rotate it by the specified number of positions.
