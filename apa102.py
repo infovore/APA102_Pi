@@ -10,6 +10,7 @@ My very first Python code, so I am sure there is a lot to be optimized ;)
 Public methods are:
  - setPixel
  - setPixelRGB
+ - setPixelHSV
  - show
  - clearStrip
  - cleanup
