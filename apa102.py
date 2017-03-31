@@ -67,6 +67,8 @@ class APA102:
         self.spi.open(0, 1)  # Open SPI port 0, slave device (CS)  1
         self.spi.max_speed_hz=8000000 # Up the speed a bit, so that the LEDs are painted faster
 
+        self.hsvMap = true # use the rainbow colour map
+
     """
     void clockStartFrame()
     This method clocks out a start frame, telling the receiving LED that it must update its own color now.
@@ -138,8 +140,10 @@ class APA102:
     written to the pixel buffer. Colors are passed as hue, saturation and value.
     """
     def setPixelHSV(self, ledNum, hue, sat, val):
+        if self.hsvMap == true:
+            hue = rainbow(hue)
         hsv = colorsys.hsv_to_rgb(hue, sat, val)
-        self.setPixel(ledNum, int(hsv[0]*255), int(hsv[1]*255), int(hsv[2]*255))      
+        self.setPixel(ledNum, int(hsv[0]*255), int(hsv[1]*255), int(hsv[2]*255))
     """
     void rotate(positions)
     Treating the internal leds array as a circular buffer, rotate it by the specified number of positions.
@@ -189,6 +193,16 @@ class APA102:
         else: # Blue -> Green
             wheelPos -= 170
             return self.combineColor(0, wheelPos * 3, 255 - wheelPos * 3);
+
+    """
+    rainbow(hue)
+    Convert standard hue to a more even spread rainbow
+    """
+    import numpy as np
+    fromArr = [0,60,120,180,240,300,359]
+    toArr = [0,90,135,181,226,271,359]
+    def rainbow(hue) -> int:
+        return int(np.interp(hue, toArr, fromArr))
 
     """
     void dumparray()
