@@ -196,7 +196,7 @@ class APA102:
 
     """
     rainbow(hue)
-    Convert standard hue to a more even spread rainbow
+    Convert standard hue to a more even spread rainbow. See https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors for example
     """
     import numpy as np
     fromArr = [0,60,120,180,240,300,359]
