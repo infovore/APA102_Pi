@@ -57,7 +57,7 @@ to make it down the line to the last LED.
 rgb_map = { 'rgb': [3,2,1], 'rbg': [3,1,2], 'grb': [2,3,1], 'gbr': [2,1,3], 'brg': [1,3,2], 'bgr': [1,2,3] }
 
 class APA102:
-    def __init__(self, numLEDs, globalBrightness = 31, order='rgb'): # The number of LEDs in the Strip
+    def __init__(self, numLEDs, globalBrightness = 31, order='rgb', useHSVMap = true): # The number of LEDs in the Strip
         self.numLEDs = numLEDs
         order = order.lower()
         self.rgb = rgb_map.get(order, rgb_map['rgb'])
@@ -68,7 +68,7 @@ class APA102:
         self.spi.open(0, 1)  # Open SPI port 0, slave device (CS)  1
         self.spi.max_speed_hz=8000000 # Up the speed a bit, so that the LEDs are painted faster
 
-        self.hsvMap = true # use the rainbow colour map
+        self.hsvMap = useHSVMap # use the rainbow colormap where appropriate.
 
     """
     void clockStartFrame()
@@ -141,6 +141,7 @@ class APA102:
     written to the pixel buffer. Colors are passed as hue, saturation and value.
     """
     def setPixelHSV(self, ledNum, hue, sat, val):
+        # (you could still set HSV without using the HSV lookup map)
         if self.hsvMap == true:
             hue = rainbow(hue)
         hsv = colorsys.hsv_to_rgb(hue, sat, val)
